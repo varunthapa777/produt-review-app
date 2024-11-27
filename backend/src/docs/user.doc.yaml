@@ -1,0 +1,242 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+paths:
+  /users/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: object
+                  properties:
+                    firstName:
+                      type: string
+                      example: John
+                    lastName:
+                      type: string
+                      example: Doe
+                username:
+                  type: string
+                  example: johndoe
+                email:
+                  type: string
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 60d0fe4f5311236168a109ca
+                      fullName:
+                        type: object
+                        properties:
+                          firstName:
+                            type: string
+                            example: John
+                          lastName:
+                            type: string
+                            example: Doe
+                      username:
+                        type: string
+                        example: johndoe
+                      email:
+                        type: string
+                        example: johndoe@example.com
+                      creditPoints:
+                        type: number
+                        example: 0
+                      profileImage:
+                        type: string
+                        example: null
+                      userLevel:
+                        type: number
+                        example: 1
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2021-06-22T19:44:15.000Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2021-06-22T19:44:15.000Z
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                          example: First name must be at least 2 characters long
+                        param:
+                          type: string
+                          example: fullName.firstName
+                        location:
+                          type: string
+                          example: body
+                          
+        "409":
+          description: Username or email already exists
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        example: Username already exists
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        example: Email already exists
+
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+  /users/login:
+    post:
+      summary: Login a user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        "200":
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 60d0fe4f5311236168a109ca
+                      fullName:
+                        type: object
+                        properties:
+                          firstName:
+                            type: string
+                            example: John
+                          lastName:
+                            type: string
+                            example: Doe
+                      username:
+                        type: string
+                        example: johndoe
+                      email:
+                        type: string
+                        example: johndoe@example.com
+                      creditPoints:
+                        type: number
+                        example: 0
+                      profileImage:
+                        type: string
+                        example: null
+                      userLevel:
+                        type: number
+                        example: 1
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2021-06-22T19:44:15.000Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2021-06-22T19:44:15.000Z
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                          example: Please provide a valid email
+                        param:
+                          type: string
+                          example: email
+                        location:
+                          type: string
+                          example: body
+        "401":
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid email or password
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error

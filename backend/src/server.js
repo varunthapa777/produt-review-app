@@ -1,11 +1,12 @@
 import http from "http";
-import { app as config } from "./config/config.js";
+import { appConfig } from "./config/config.js";
 import app from "./app.js";
 import connectDB from "./config/db.js";
 
-const { port } = config;
+const { port } = appConfig;
 
 const server = http.createServer(app);
+
 const startServer = async () => {
   try {
     await connectDB();

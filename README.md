@@ -53,6 +53,10 @@ MONGO_URI_TEST=<your-test-mongodb-uri>
 JWT_SECRET=<your-jwt-secret>
 ```
 
+## API Documentation
+
+For detailed API documentation, visit the `/api-docs` endpoint after running the server.
+
 ## License
 
 This project is licensed under the ISC License.
