@@ -64,6 +64,8 @@ NODE_ENV=development
 MONGO_URI=<your-production-mongodb-uri>
 MONGO_URI_TEST=<your-test-mongodb-uri>
 JWT_SECRET=<your-jwt-secret>
+EMAIL_USER=<email_for_otp>
+EMAIL_PASS=<your_app_password>
 ```
 
 ## API Documentation
