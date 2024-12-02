@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 import HomePage from "./pages/Home";
@@ -62,6 +62,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/home" element={<HomePage />} />
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </QueryClientProvider>
     </>
