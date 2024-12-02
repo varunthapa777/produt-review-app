@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema(
     },
     creditPoints: { type: Number, default: 0 },
     profileImage: { type: String, default: null },
+    isEmailVerified: { type: Boolean, default: false },
     userLevel: { type: Number, default: 1 },
   },
   { timestamps: true }

@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a Node.js backend server using Express, Mongoose, and other dependencies.
+This is a Node.js backend server using Express, Mongoose, and other dependencies. It also serves the frontend static files.
 
 ## Prerequisites
 
@@ -18,9 +18,22 @@ This is a Node.js backend server using Express, Mongoose, and other dependencies
    cd backend
    ```
 
-2. Install dependencies:
+2. Install backend dependencies:
+
    ```sh
    npm install
+   ```
+
+3. Navigate to the frontend directory and install dependencies:
+
+   ```sh
+   cd ../frontend
+   npm install
+   ```
+
+4. Build the frontend static files:
+   ```sh
+   npm run build
    ```
 
 ## Running the Server

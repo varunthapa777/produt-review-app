@@ -1,6 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
-import userContorller from "../controllers/user.controller.js";
+import userController from "../controllers/user.controller.js";
+import authUser from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -19,18 +20,36 @@ router.post(
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
   ],
-  userContorller.registrUser
+  userController.registrUser
 );
 
-router.post(
-  "/login",
+router.post("/login", userController.loginUser);
+
+// route for user profile
+router.get("/profile", authUser, userController.getProfile);
+
+router.get("/test", (req, res) => {
+  res.status(200).json({ message: "Test route" });
+});
+
+router.post("/reset-password", userController.resetPassword);
+
+router.post("/verify-email", userController.verfiyEmail);
+
+router.post("/verify-otp/email", userController.verifyOtpForEmailVerification);
+
+router.post("/verify-otp/password", userController.verifyOtpForPasswordReset);
+
+router.patch(
+  "/change-password",
   [
-    body("email").isEmail().withMessage("Please provide a valid email"),
-    body("password")
+    body("newPassword")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
   ],
-  userContorller.loginUser
+  userController.changePassword
 );
 
+// route for user logout
+router.get("/logout", authUser, userController.logoutUser);
 export default router;

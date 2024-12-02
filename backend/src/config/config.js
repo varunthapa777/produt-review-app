@@ -14,8 +14,18 @@ const db = {
 };
 
 const jwt = {
-  secret: process.env.JWT_SECRET || "secret",
-  expiration: "1h",
+  secret: process.env.JWT_SECRET,
+  expiration: process.env.JWT_EXPIRATION,
 };
 
-export { app as appConfig, db as dbConfig, jwt as jwtConfig };
+const email = {
+  user: process.env.EMAIL_USER,
+  pass: process.env.EMAIL_PASS,
+};
+
+export {
+  app as appConfig,
+  db as dbConfig,
+  jwt as jwtConfig,
+  email as emailConfig,
+};
