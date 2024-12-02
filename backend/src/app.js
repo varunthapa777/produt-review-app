@@ -8,8 +8,8 @@ import path from "path";
 
 const __dirname = path.resolve();
 const app = express();
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.static(path.join(__dirname, "./frontend/dist")));
-console.log(process.env.NODE_ENV);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -19,6 +19,4 @@ app.use("/api/users", userRoute);
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./frontend/dist/index.html"));
 });
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 export default app;

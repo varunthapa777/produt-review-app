@@ -12,7 +12,6 @@ const HomePage = () => {
       .then((res) => res.json())
       .then((data: testResponse) => {
         setMessage(data.message);
-        console.log(data.message);
       })
       .catch((error) => {
         toast.error("Failed to fetch data");

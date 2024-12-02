@@ -44,7 +44,6 @@ const SignInPage = () => {
       localStorage.setItem("token", response.data.token);
       auth.setAuthenticated(true);
       navigate("/profile");
-      console.log("Sign in successful:", response.data);
       // Handle successful login, e.g., redirect to dashboard
     } catch (error) {
       if (axios.isAxiosError<AxiosErrorResponse>(error)) {

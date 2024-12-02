@@ -40,8 +40,7 @@ const ResetPasswordPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/users/reset-password", { email });
-      console.log("OTP sent successfully:", response.data);
+      await axios.post("/api/users/reset-password", { email });
       startTimer();
       setLoading(false);
       setShowOtpInput(true);

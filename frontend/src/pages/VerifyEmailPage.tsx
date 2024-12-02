@@ -45,8 +45,7 @@ const VerifyEmailPage = () => {
     }
 
     try {
-      const response = await axios.post("/api/users/verify-email", { email });
-      console.log("OTP sent successfully:", response.data);
+      await axios.post("/api/users/verify-email", { email });
       startTimer();
       setLoading(false);
       setShowOtpInput(true);
