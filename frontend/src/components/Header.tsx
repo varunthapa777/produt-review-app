@@ -11,8 +11,8 @@ import {
   FaStar,
 } from "react-icons/fa";
 import { useAuthStore } from "../stores/authStore";
-import DarkLogo from "../assets/DarkLogo.svg";
-import LightLogo from "../assets/LightLogo.svg";
+import DarkLogo from "../assets/darkLogo.svg";
+import LightLogo from "../assets/lightLogo.svg";
 
 const Header = () => {
   const { isAuthenticated } = useAuthStore();
