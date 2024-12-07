@@ -8,7 +8,6 @@ const ScrapeFlipkart = async (url) => {
 
   try {
     const browser = await puppeteer.launch({
-      executablePath: chromeConfig.executablePath,
       headless: true,
     });
     const page = await browser.newPage();
