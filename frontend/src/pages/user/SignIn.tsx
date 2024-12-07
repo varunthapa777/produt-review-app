@@ -1,19 +1,18 @@
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import lightLogo from "../assets/lightLogo.svg";
-import darkLogo from "../assets/darkLogo.svg";
+import lightLogo from "../../assets/lightLogo.svg";
+import darkLogo from "../../assets/darkLogo.svg";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import TextInput from "../components/ui/TextInput";
+import TextInput from "../../components/ui/TextInput";
 import { FaUser } from "react-icons/fa";
-import PasswordInput from "../components/ui/PasswordInput";
+import PasswordInput from "../../components/ui/PasswordInput";
 import toast from "react-hot-toast";
-import { useColorSchemeStore } from "../stores/colorSchemeStore";
-import { useAuthStore } from "../stores/authStore";
+import { useColorSchemeStore } from "../../stores/colorSchemeStore";
+import { useAuthStore } from "../../stores/authStore";
 
 interface AxiosErrorResponse {
   error: string;
-  errors: { msg: string }[];
 }
 
 const SignInPage = () => {
@@ -26,7 +25,7 @@ const SignInPage = () => {
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isEmail = (value: string) => {
+    const isEmail: (value: string) => boolean = (value: string) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(value);
     };
@@ -41,18 +40,13 @@ const SignInPage = () => {
       const response = await axios.post("/api/users/login", payload);
 
       toast.success("Sign in successful");
-      localStorage.setItem("token", response.data.token);
-      auth.setAuthenticated(true);
-      navigate("/profile");
+      auth.login(response.data.token);
+      navigate("/home");
       // Handle successful login, e.g., redirect to dashboard
     } catch (error) {
       if (axios.isAxiosError<AxiosErrorResponse>(error)) {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 400) {
           toast.error(error.response?.data.error);
-        } else if (error.response?.status === 400) {
-          error.response?.data.errors.forEach((error) => {
-            toast.error(error.msg);
-          }, []);
         }
         console.error("Sign in failed:", error);
         // Handle login failure, e.g., show error message

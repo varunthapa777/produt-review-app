@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
+import { useAdminAuthStore } from "../stores/adminAuthStore";
 
 const useAxiosInterceptors = () => {
-  const { setAuthenticated } = useAuthStore();
+  const userAuth = useAuthStore();
+  const adminAuth = useAdminAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,9 +14,13 @@ const useAxiosInterceptors = () => {
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
-          setAuthenticated(false);
-          localStorage.removeItem("token");
-          navigate("/signin");
+          if (error.response.data.type === "user") {
+            userAuth.logout();
+            navigate("/signin");
+          } else {
+            adminAuth.adminLogout();
+            navigate("/admin/signin");
+          }
         }
         if (error.response?.status === 403) {
           navigate("/verify-email", {
@@ -28,7 +34,7 @@ const useAxiosInterceptors = () => {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [setAuthenticated, navigate]);
+  }, [userAuth, adminAuth, navigate]);
 };
 
 export default useAxiosInterceptors;

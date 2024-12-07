@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useProfileQuery } from "../api/queries/userQueries";
-import { useAuthStore } from "../stores/authStore";
+import { useProfileQuery } from "../../api/queries/userQueries";
+import { useAuthStore } from "../../stores/authStore";
 
 const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const ProfilePage: React.FC = () => {
       >
         Logout
       </button>
-      <Link to="/home">Home</Link>
+      <Link to="/">Home</Link>
       {/* other user fields... */}
     </div>
   );

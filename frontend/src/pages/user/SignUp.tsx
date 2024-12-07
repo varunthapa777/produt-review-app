@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ChangeEvent, useState } from "react";
 import { FaUser, FaEnvelope } from "react-icons/fa";
-import PasswordInput from "../components/ui/PasswordInput";
-import TextInput from "../components/ui/TextInput";
+import PasswordInput from "../../components/ui/PasswordInput";
+import TextInput from "../../components/ui/TextInput";
 import toast from "react-hot-toast";
 
 interface AxiosErrorResponse {
@@ -41,7 +41,7 @@ const SignUpPage = () => {
         password,
       });
       toast.success("Sign up successful");
-      navigate("/signin");
+      navigate("/verify-email");
     } catch (error) {
       if (axios.isAxiosError<AxiosErrorResponse>(error)) {
         if (error.response?.status === 400) {

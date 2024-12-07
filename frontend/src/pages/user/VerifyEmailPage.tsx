@@ -1,14 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import OtpInput from "../components/OtpInput";
-import { useNavigate } from "react-router-dom";
+import OtpInput from "../../components/OtpInput";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const ResetPasswordPage = () => {
+const VerifyEmailPage = () => {
   const [timer, setTimer] = useState({ minutes: 2, seconds: 0 });
   const [resendDisabled, setResendDisabled] = useState(false);
-  const [email, setEmail] = useState("");
 
   const startTimer = () => {
     setResendDisabled(true);
@@ -32,15 +31,21 @@ const ResetPasswordPage = () => {
     handleSendOtpClick();
   };
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSendOtpClick = async () => {
     setLoading(true);
+    const email = location.state.email;
+    if (!email) {
+      navigate("/signin");
+      return;
+    }
 
     try {
-      await axios.post("/api/users/reset-password", { email });
+      await axios.post("/api/users/verify-email", { email });
       startTimer();
       setLoading(false);
       setShowOtpInput(true);
@@ -49,23 +54,25 @@ const ResetPasswordPage = () => {
     }
   };
   const handleOtpSubmit = (otp: string) => {
+    const email = location.state.email;
     if (!email) {
-      toast.error("Email is required");
+      navigate("/signin");
       return;
     }
 
     const verifyOtp = async () => {
       try {
-        const response = await axios.post("/api/users/verify-otp/password", {
+        const response = await axios.post("/api/users/verify-otp/email", {
           email,
           otp,
         });
         toast.success(response.data.message);
-        navigate("/change-password", { state: { token: response.data.token } });
+        navigate("/signin");
       } catch (error) {
         toast.error("an error occurred");
 
         console.error("Error verifying OTP:", error);
+        navigate("/verify-email", { state: { email } });
       }
     };
 
@@ -78,56 +85,31 @@ const ResetPasswordPage = () => {
         <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
           <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white">
-              Reset Your Password
+              Verify Your Email
             </h2>
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSendOtpClick();
-              }}
-            >
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Email address
-              </label>
-              <div className="space-y-4">
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            {loading ? (
+              <div className="flex justify-center">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 1 }}
+                  className="w-6 h-6 border-4 border-t-4 border-t-transparent border-indigo-600 rounded-full"
                 />
-
-                {loading ? (
-                  <div className="flex justify-center">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ repeat: Infinity, duration: 1 }}
-                      className="w-6 h-6 border-4 border-t-4 border-t-transparent border-indigo-600 rounded-full"
-                    />
-                  </div>
-                ) : (
-                  <button
-                    type="submit"
-                    className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                  >
-                    Send OTP
-                  </button>
-                )}
               </div>
-            </form>
+            ) : (
+              <button
+                onClick={handleSendOtpClick}
+                className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              >
+                Send OTP
+              </button>
+            )}
           </div>
         </div>
       ) : (
         <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
           <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white">
-              Reset Your Password
+              Verify Your Email
             </h2>
             <OtpInput inputLength={6} onSubmitOtp={handleOtpSubmit} />
             <div className="text-center">
@@ -159,4 +141,4 @@ const ResetPasswordPage = () => {
   );
 };
 
-export default ResetPasswordPage;
+export default VerifyEmailPage;

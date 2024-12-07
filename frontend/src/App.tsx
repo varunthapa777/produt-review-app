@@ -1,20 +1,27 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import SignInPage from "./pages/SignIn";
-import SignUpPage from "./pages/SignUp";
-import HomePage from "./pages/Home";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
-import ChangePasswordPage from "./pages/ChangePasswordPage";
 import { Toaster } from "react-hot-toast";
-import ProfilePage from "./pages/Profile";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useColorSchemeStore } from "./stores/colorSchemeStore";
 import { useEffect } from "react";
 import useAxiosInterceptors from "./hooks/useAxiosInterceptors";
-import ProtectedRoute from "./pages/ProtectedRoute";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ProtectedRoute from "./pages/user/ProtectedRoute";
+import ResetPasswordPage from "./pages/user/ResetPasswordPage";
 import { useAuthStore } from "./stores/authStore";
-import LandingPage from "./pages/LandingPage";
-
+import ProfilePage from "./pages/user/Profile";
+import SignInPage from "./pages/user/SignIn";
+import SignUpPage from "./pages/user/SignUp";
+import HomePage from "./pages/Home";
+import VerifyEmailPage from "./pages/user/VerifyEmailPage";
+import ChangePasswordPage from "./pages/user/ChangePasswordPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminRouteWrapper from "./pages/admin/AdminRouteWrapper";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./pages/admin/AdminLayout";
+import UsersPage from "./pages/admin/Users";
+import ModeratorPage from "./pages/admin/Moderators";
+import ReviewsPage from "./pages/admin/AuditReview";
+import ProductPage from "./pages/admin/Products";
+import ProductDetailPage from "./pages/ProductDetail";
 const queryClient = new QueryClient();
 const App = () => {
   const { setDarkMode } = useColorSchemeStore();
@@ -39,11 +46,8 @@ const App = () => {
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <Routes>
-          <Route
-            index
-            element={isAuthenticated ? <HomePage /> : <LandingPage />}
-          />
-
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route
             path="/signup"
             element={isAuthenticated ? <HomePage /> : <SignUpPage />}
@@ -60,8 +64,23 @@ const App = () => {
           <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/home" element={<HomePage />} />
           </Route>
+
+          <Route path="/admin/signin" element={<AdminLogin />} />
+          <Route element={<AdminRouteWrapper />}>
+            <Route element={<AdminLayout />}>
+              <Route
+                path="/admin"
+                element={<Navigate to="/admin/dashboard" replace />}
+              />
+              <Route path="/admin/users" element={<UsersPage />} />
+              <Route path="/admin/moderators" element={<ModeratorPage />} />
+              <Route path="/admin/reviews" element={<ReviewsPage />} />
+              <Route path="/admin/products" element={<ProductPage />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            </Route>
+          </Route>
+          <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </QueryClientProvider>

@@ -28,10 +28,6 @@ router.post("/login", userController.loginUser);
 // route for user profile
 router.get("/profile", authUser, userController.getProfile);
 
-router.get("/test", (req, res) => {
-  res.status(200).json({ message: "Test route" });
-});
-
 router.post("/reset-password", userController.resetPassword);
 
 router.post("/verify-email", userController.verfiyEmail);
