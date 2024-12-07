@@ -103,8 +103,8 @@ const ProductDetailPage: React.FC = () => {
           <FaArrowLeft className="mr-2" /> Back
         </button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex py-10 px-5 bg-gray-100 pt-4 rounded-lg border border-5">
-            <div className="flex flex-col space-y-2">
+          <div className="flex flex-col-reverse md:flex-row py-10 px-5 bg-gray-100 pt-4 rounded-lg border border-5">
+            <div className="flex flex-row md:flex-col space-x-2 md:space-x-0 md:space-y-2 overflow-x-auto md:overflow-visible">
               {product?.images.map((image, index) => (
                 <img
                   key={index}
@@ -118,7 +118,7 @@ const ProductDetailPage: React.FC = () => {
             <img
               src={selectedImage || product?.mainImage}
               alt={product?.name}
-              className="w-full h-64 object-contain rounded-lg"
+              className="w-full h-64 object-contain rounded-lg mb-4 md:mt-0 md:ml-4"
             />
           </div>
           <div>
