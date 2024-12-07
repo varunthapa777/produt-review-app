@@ -8,11 +8,14 @@ const ScrapeFlipkart = async (url) => {
 
   try {
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: "shell",
     });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
 
+    await page.waitForSelector("span.VU-ZEz", {
+      timeout: 5000,
+    });
     const productTitle = await page.$eval(
       "span.VU-ZEz",
       (el) => el.textContent
