@@ -1,12 +1,16 @@
 import puppeteer from "puppeteer";
 import convertPrice from "../utils/convertPrice.js";
+import { chromeConfig } from "../config/config.js";
 const ScrapeFlipkart = async (url) => {
   if (!url) {
     return Error("URL is required");
   }
 
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      executablePath: chromeConfig.executablePath,
+      headless: true,
+    });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
 

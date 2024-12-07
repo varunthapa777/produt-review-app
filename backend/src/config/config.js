@@ -23,9 +23,14 @@ const email = {
   pass: process.env.EMAIL_PASS,
 };
 
+const chrome = {
+  executablePath: process.env.CHROME_EXECUTABLE_PATH,
+};
+
 export {
   app as appConfig,
   db as dbConfig,
   jwt as jwtConfig,
   email as emailConfig,
+  chrome as chromeConfig,
 };
