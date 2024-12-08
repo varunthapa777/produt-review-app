@@ -12,4 +12,9 @@ router.get("/", productController.getProducts);
 router.get("/:id", productController.getProductById);
 router.get("/:id/reviews", productController.getProductReviews);
 router.post("/:id/reviews", authUser, productController.addProductReview);
+router.patch(
+  "/:id/reviews/:reviewId",
+  adminAuth,
+  productController.updateReviewStatus
+);
 export default router;

@@ -1,33 +1,19 @@
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useAdminAuthStore } from "../../stores/adminAuthStore";
-import toast from "react-hot-toast";
+import { useDashboardData } from "../../api/queries/adminQueries";
+import DashboardChart from "../../components/DashboardChart";
 
 const AdminDashboard = () => {
-  const { adminLogout } = useAdminAuthStore();
-  const navigate = useNavigate();
+  const { data, isLoading, error } = useDashboardData();
 
-  const handleLogout = async () => {
-    try {
-      await axios.get("/api/admin/logout");
-      adminLogout();
-      navigate("/admin/login");
-      toast.success("Logged out successfully");
-    } catch (error) {
-      toast.error("Error logging out");
-      console.error("Error logging out", error);
-    }
-  };
-
+  if (isLoading)
+    return <div className="text-center text-gray-500">Loading...</div>;
+  if (error)
+    return <div className="text-center text-red-500">Error fetching data</div>;
   return (
-    <div>
-      <h1 className="dark:text-white">Admin Dashboard</h1>
-      <button
-        onClick={handleLogout}
-        className="mt-4 p-2 bg-red-500 text-white rounded"
-      >
-        Logout
-      </button>
+    <div className="p-8 bg-gray-100 dark:bg-gray-900 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+        Admin Dashboard
+      </h1>
+      {data && <DashboardChart data={data} />}
     </div>
   );
 };

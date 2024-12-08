@@ -19,7 +19,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
 import UsersPage from "./pages/admin/Users";
 import ModeratorPage from "./pages/admin/Moderators";
-import ReviewsPage from "./pages/admin/AuditReview";
+import AuditReviewsPage from "./pages/admin/AuditReview";
 import ProductPage from "./pages/admin/Products";
 import ProductDetailPage from "./pages/ProductDetail";
 const queryClient = new QueryClient();
@@ -75,7 +75,7 @@ const App = () => {
               />
               <Route path="/admin/users" element={<UsersPage />} />
               <Route path="/admin/moderators" element={<ModeratorPage />} />
-              <Route path="/admin/reviews" element={<ReviewsPage />} />
+              <Route path="/admin/reviews" element={<AuditReviewsPage />} />
               <Route path="/admin/products" element={<ProductPage />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Route>

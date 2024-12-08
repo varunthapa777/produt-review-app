@@ -7,7 +7,9 @@ interface Review {
   productId: number;
   rating: number;
   comment: string;
+  reviewStatus: string;
   userName: string;
+  createdAt: string;
 }
 
 const getReviewsById = async (id: string): Promise<Review[]> => {

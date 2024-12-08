@@ -73,6 +73,20 @@ const addProductReview = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const updateReviewStatus = async (req, res) => {
+  console.log(req.params.reviewId, req.body.status, req.params.reviewId);
+  try {
+    const review = await productService.updateReviewStatus({
+      reviewId: req.params.reviewId,
+      status: req.body.status,
+      adminId: req.admin._id,
+    });
+    res.status(200).json(review);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 export default {
   scrapeFlipkart,
   scrapeAmazon,
@@ -81,4 +95,5 @@ export default {
   getProductById,
   getProductReviews,
   addProductReview,
+  updateReviewStatus,
 };

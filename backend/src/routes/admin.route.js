@@ -11,5 +11,6 @@ router.get("/users", adminAuth, async (req, res) => {
   const users = await User.find();
   res.send(users);
 });
-
+router.get("/dashboard", adminAuth, adminController.getDashBoardData);
+router.get("/reviews", adminController.getReviews);
 export default router;

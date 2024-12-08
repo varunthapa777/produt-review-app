@@ -15,6 +15,12 @@ interface AddReviewInput {
   comment: string;
 }
 
+interface UpdateReviewStatusInput {
+  reviewId: string;
+  status: string;
+  productId: string;
+}
+
 const addReview = async (review: AddReviewInput): Promise<Review> => {
   const { data } = await axios.post(
     `/api/products/${review.productId}/reviews`,
@@ -26,5 +32,23 @@ const addReview = async (review: AddReviewInput): Promise<Review> => {
 export const useAddReview = () => {
   return useMutation<Review, Error, AddReviewInput>({
     mutationFn: addReview,
+  });
+};
+
+const updateReviewStatus = async (
+  review: UpdateReviewStatusInput
+): Promise<Review> => {
+  console.log(review);
+  const { data } = await axios.patch(
+    `/api/products/${review.productId}/reviews/${review.reviewId}`,
+    { status: review.status }
+  );
+
+  return data;
+};
+
+export const useUpdateReviewStatus = () => {
+  return useMutation<Review, Error, UpdateReviewStatusInput>({
+    mutationFn: updateReviewStatus,
   });
 };

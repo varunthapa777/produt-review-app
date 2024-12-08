@@ -41,7 +41,7 @@ const SignUpPage = () => {
         password,
       });
       toast.success("Sign up successful");
-      navigate("/verify-email");
+      navigate("/verify-email", { state: { email } });
     } catch (error) {
       if (axios.isAxiosError<AxiosErrorResponse>(error)) {
         if (error.response?.status === 400) {

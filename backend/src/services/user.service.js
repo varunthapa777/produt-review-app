@@ -141,6 +141,10 @@ const changePassword = async (token, password) => {
   }
 };
 
+const getUserCount = async () => {
+  return await UserModel.countDocuments();
+};
+
 export default {
   createUser,
   findUser,
@@ -150,4 +154,5 @@ export default {
   verifyOtpForPasswordReset,
   verifyOtpForEmailVerification,
   changePassword,
+  getUserCount,
 };

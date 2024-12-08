@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import { FaStar, FaStarHalfAlt, FaRegStar, FaArrowLeft } from "react-icons/fa";
+import { FcApproval } from "react-icons/fc";
 import { useProductById } from "../api/queries/productQueries";
 import toast from "react-hot-toast";
 import { useReviewsById } from "../api/queries/reviewQueries";
 import { useAddReview } from "../api/mutations/reviewMutaions";
 import { useQueryClient } from "@tanstack/react-query";
+import getRelativeTime from "../utils/getRelativeTime";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -73,7 +75,10 @@ const ProductDetailPage: React.FC = () => {
           toast.success("Review submitted successfully");
           setRating(0);
           setComment("");
-          queryClient.refetchQueries({ queryKey: ["review", id] });
+          queryClient.invalidateQueries({
+            queryKey: ["review", id],
+            exact: true,
+          });
         },
         onError: () => {
           toast.error("Failed to submit review");
@@ -162,9 +167,17 @@ const ProductDetailPage: React.FC = () => {
                 key={review._id}
                 className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"
               >
-                <h5 className="text-xl font-bold dark:text-white mb-3">
-                  {review.userName}
-                </h5>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {getRelativeTime(new Date(review.createdAt))}
+                </p>
+                <p>
+                  <strong className="dark:text-white">{review.userName}</strong>{" "}
+                  {review.reviewStatus === "approved" ? (
+                    <FcApproval className="text-green-500 inline-block text-2xl" />
+                  ) : (
+                    ""
+                  )}
+                </p>
                 <div className="flex items-center">
                   {renderStars(review.rating)}
                   <span className="ml-2 text-gray-600 dark:text-gray-400">

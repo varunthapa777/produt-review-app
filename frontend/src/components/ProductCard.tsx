@@ -33,9 +33,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
     );
   };
 
+  const truncateName = (name: string, maxLength: number) => {
+    return name.length > maxLength ? `${name.slice(0, maxLength)}...` : name;
+  };
+
   return (
     <motion.div
-      className="bg-white rounded-lg shadow-md overflow-hidden"
+      className="bg-white rounded-lg shadow-md overflow-hidden min-h-full"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
@@ -48,7 +52,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         />
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
+        <h3 className="text-lg font-semibold text-gray-800">
+          {truncateName(name, 40)}
+        </h3>
         <p className="text-gray-600 dark:text-gray-400">₹{price}</p>
         {rating > 0 ? (
           <div className="flex items-center mt-2">
