@@ -9,6 +9,7 @@ import { useReviewsById } from "../api/queries/reviewQueries";
 import { useAddReview } from "../api/mutations/reviewMutaions";
 import { useQueryClient } from "@tanstack/react-query";
 import getRelativeTime from "../utils/getRelativeTime";
+import RatingStars from "../components/ui/RatingStars";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +20,6 @@ const ProductDetailPage: React.FC = () => {
     isLoading: reviewLoading,
     isError: reviewError,
   } = useReviewsById(id as string);
-
   const addReviewMutation = useAddReview();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [rating, setRating] = useState<number>(0);
@@ -97,6 +97,7 @@ const ProductDetailPage: React.FC = () => {
 
   const averageRating = calculateAverageRating(reviews || []);
 
+  console.log(product);
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
       <Header />
@@ -135,7 +136,7 @@ const ProductDetailPage: React.FC = () => {
                 ₹{product?.price}
               </p>
               <div className="flex items-center mt-2">
-                {renderStars(averageRating)}
+                <RatingStars rating={averageRating} />
                 <span className="ml-2 text-gray-600 dark:text-gray-400">
                   {averageRating.toFixed(1)}
                 </span>
@@ -147,6 +148,13 @@ const ProductDetailPage: React.FC = () => {
             <p className="mt-2 text-gray-600 dark:text-gray-400">
               <strong>Category:</strong> {product?.category}
             </p>
+            <br />
+            <a
+              className="dark:text-white dark:bg-blue-800 dark:hover:bg-blue-900 bg-blue-400 hover:bg-blue-500 px-4 py-4 rounded-md"
+              href={product?.buylink}
+            >
+              Buy Link
+            </a>
           </div>
         </div>
         <div className="mt-8">
@@ -204,7 +212,7 @@ const ProductDetailPage: React.FC = () => {
               {[...Array(5)].map((_, index) => (
                 <FaStar
                   key={index}
-                  className={`cursor-pointer ${
+                  className={`cursor-pointer text-3xl ${
                     index < rating ? "text-yellow-500" : "text-gray-300"
                   }`}
                   onClick={() => handleRatingChange(index + 1)}

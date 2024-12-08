@@ -10,7 +10,7 @@ interface Product {
   images: string[];
   brand: string;
   category: string;
-  buyLink: string;
+  buylink: string;
   averageRating: number;
 }
 

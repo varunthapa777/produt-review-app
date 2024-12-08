@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Product, useReviewsByStatus } from "../../api/queries/adminQueries";
 import { useUpdateReviewStatus } from "../../api/mutations/reviewMutaions";
 import { useQueryClient } from "@tanstack/react-query";
+import RatingStars from "../../components/ui/RatingStars";
 
 const AuditReviewsPage = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -34,7 +35,6 @@ const AuditReviewsPage = () => {
       }
     );
     // Add logic to approve the review
-    console.log(`Approved review with ID: ${reviewId}`);
   };
 
   const handleReject = (reviewId: string, productId: string) => {
@@ -53,7 +53,6 @@ const AuditReviewsPage = () => {
         },
       }
     );
-    console.log(`Rejected review with ID: ${reviewId}`);
   };
 
   const renderReviews = (products: Product[]) => {
@@ -84,7 +83,12 @@ const AuditReviewsPage = () => {
               {review.userName}
             </h5>
             <p className="dark:text-gray-300">{review.comment}</p>
-            <p className="dark:text-gray-300">Rating: {review.rating}</p>
+            <p className="dark:text-gray-300 flex items-center space-x-4">
+              <span>Rating: </span>
+              <span className="flex">
+                <RatingStars rating={review.rating} />
+              </span>
+            </p>
             {selectedTab === 0 && (
               <div className="flex space-x-2 mt-2">
                 <button

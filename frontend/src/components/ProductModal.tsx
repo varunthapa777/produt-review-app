@@ -12,7 +12,7 @@ interface ProductModalProps {
 interface ProductDetails {
   name: string;
   price: number;
-  buyLink: string;
+  buylink: string;
   mainImage: string;
   description: string;
   images: string[];
@@ -33,7 +33,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [productDetails, setProductDetails] = useState<ProductDetails>({
     name: "",
     price: 0,
-    buyLink: "",
+    buylink: "",
     mainImage: "",
     description: "",
     images: [] as string[],
@@ -68,7 +68,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         price,
         description: "",
         mainImage: images.length > 0 ? images[0] : "",
-        buyLink: extractLink,
+        buylink: extractLink,
         brand: "",
         category: "",
         images: images.length > 0 ? images : [],
@@ -89,12 +89,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
         price: 0,
         description: "",
         mainImage: "",
-        buyLink: "",
+        buylink: "",
         brand: "",
         category: "",
         images: [],
       });
       setExtractLink("");
+      console.log("Product Details:", productDetails);
     } catch (error) {
       console.error("Failed to add product", error);
       toast.error("Failed to add product");
@@ -191,7 +192,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
           type="text"
           name="link"
           placeholder="Product Link"
-          value={productDetails.buyLink}
+          value={productDetails.buylink}
           onChange={handleInputChange}
           className="w-full p-2 mb-4 border rounded-lg"
           required
