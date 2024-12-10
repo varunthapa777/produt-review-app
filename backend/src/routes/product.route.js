@@ -17,4 +17,5 @@ router.patch(
   adminAuth,
   productController.updateReviewStatus
 );
+
 export default router;

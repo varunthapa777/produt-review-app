@@ -22,6 +22,8 @@ import ModeratorPage from "./pages/admin/Moderators";
 import AuditReviewsPage from "./pages/admin/AuditReview";
 import ProductPage from "./pages/admin/Products";
 import ProductDetailPage from "./pages/ProductDetail";
+import AboutPage from "./pages/About";
+import Header from "./components/Header";
 const queryClient = new QueryClient();
 const App = () => {
   const { setDarkMode } = useColorSchemeStore();
@@ -46,8 +48,10 @@ const App = () => {
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route element={<Header />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/products/:id" element={<ProductDetailPage />} />
+          </Route>
           <Route
             path="/signup"
             element={isAuthenticated ? <HomePage /> : <SignUpPage />}
@@ -65,7 +69,7 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
-
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/admin/signin" element={<AdminLogin />} />
           <Route element={<AdminRouteWrapper />}>
             <Route element={<AdminLayout />}>

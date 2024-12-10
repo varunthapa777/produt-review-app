@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { motion } from "framer-motion";
 import defaultImage from "../../assets/react.svg";
+import Loading from "../../components/Loading";
 
 const fetchUsers = async () => {
   const { data } = await axios.get("/api/admin/users");
@@ -14,7 +15,7 @@ const UsersPage = () => {
     queryFn: fetchUsers,
   });
 
-  if (isLoading) return <div className="dark:text-white">Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div className="dark:text-white">Error loading users</div>;
 
   return (
@@ -25,13 +26,13 @@ const UsersPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {data.map(
           (user: {
-            id: string;
+            _id: string;
             profileImage?: string;
             username: string;
             fullName: { firstName: string; lastName: string };
           }) => (
             <motion.div
-              key={user.id}
+              key={user._id}
               className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

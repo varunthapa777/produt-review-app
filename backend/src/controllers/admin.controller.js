@@ -58,4 +58,64 @@ const getReviews = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-export default { LoginAdmin, LogoutAdmin, getDashBoardData, getReviews };
+
+const getAllUsers = async (req, res) => {
+  const users = await userService.getAllUsers();
+
+  res.status(200).json(users);
+};
+
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await productService.getAllProductsByAdmin(req.admin._id);
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteProductById = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    await productService.deleteProductById(productId);
+    res.status(200).json({ message: "Product deleted successfully}" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateProductById = async (req, res) => {
+  const productId = req.params.id;
+  const data = req.body;
+  try {
+    await productService.updateProductById(productId, data);
+    res.status(200).json({ message: "Product updated successfully" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deletReviewById = async (req, res) => {
+  const reviewId = req.params.id;
+  try {
+    await productService.deleteProductReviewById(reviewId);
+    res.status(200).json({ message: "Review deleted successfully" });
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
+export default {
+  LoginAdmin,
+  LogoutAdmin,
+  getDashBoardData,
+  getReviews,
+  getAllUsers,
+  getAllProducts,
+  deleteProductById,
+  updateProductById,
+  deletReviewById,
+};

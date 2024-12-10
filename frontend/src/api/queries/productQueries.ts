@@ -16,13 +16,11 @@ interface Product {
 
 const getProducts = async (): Promise<Product[]> => {
   const { data } = await axios.get("/api/products");
-  console.log("Data :", data);
   return data as Product[];
 };
 
 const getProductById = async (id: string): Promise<Product> => {
   const { data } = await axios.get(`/api/products/${id}`);
-  console.log("Data :", data);
   return data as Product;
 };
 export const useProducts = () => {

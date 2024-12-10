@@ -4,6 +4,9 @@ import { Product, useReviewsByStatus } from "../../api/queries/adminQueries";
 import { useUpdateReviewStatus } from "../../api/mutations/reviewMutaions";
 import { useQueryClient } from "@tanstack/react-query";
 import RatingStars from "../../components/ui/RatingStars";
+import Loading from "../../components/Loading";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const AuditReviewsPage = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -15,7 +18,7 @@ const AuditReviewsPage = () => {
     setSelectedTab(index);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>Error loading data</div>;
 
   const handleApprove = (reviewId: string, productId: string) => {
@@ -34,7 +37,6 @@ const AuditReviewsPage = () => {
         },
       }
     );
-    // Add logic to approve the review
   };
 
   const handleReject = (reviewId: string, productId: string) => {
@@ -55,13 +57,27 @@ const AuditReviewsPage = () => {
     );
   };
 
+  const handleDelete = async (reviewId: string) => {
+    try {
+      await axios.delete(`/api/admin/reviews/${reviewId}`);
+      toast.success("Review deleted successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["audit_reviews"],
+        exact: true,
+      });
+    } catch (error) {
+      toast.error("Failed to delete review");
+      console.log(error);
+    }
+  };
+
   const renderReviews = (products: Product[]) => {
     return products.map((product) => (
       <div key={product._id.productId} className="mb-4">
         <h2 className="text-xl font-semibold dark:text-gray-200">
           {product.productName}
         </h2>
-        <div className="flex justify-center my-2 bg-gray-100 p-10 max-w-fit rounded-lg m-auto ">
+        <div className="flex justify-center my-2 bg-gray-100 p-10 max-w-fit rounded-lg m-auto">
           <img
             src={product.productImage}
             alt={product.productName}
@@ -109,6 +125,42 @@ const AuditReviewsPage = () => {
                 </button>
               </div>
             )}
+            {selectedTab == 1 && (
+              <div className="flex space-x-2 mt-2">
+                <button
+                  className="py-1 px-3 bg-red-500 text-white rounded"
+                  onClick={() =>
+                    handleReject(review.reviewId, product._id.productId)
+                  }
+                >
+                  Reject
+                </button>
+                <button
+                  className="py-1 px-3 bg-gray-500 text-white rounded"
+                  onClick={() => handleDelete(review.reviewId)}
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+            {selectedTab == 2 && (
+              <div className="flex space-x-2 mt-2">
+                <button
+                  className="py-1 px-3 bg-green-500 text-white rounded"
+                  onClick={() =>
+                    handleApprove(review.reviewId, product._id.productId)
+                  }
+                >
+                  Approve
+                </button>
+                <button
+                  className="py-1 px-3 bg-gray-500 text-white rounded"
+                  onClick={() => handleDelete(review.reviewId)}
+                >
+                  Remove
+                </button>
+              </div>
+            )}
           </motion.div>
         ))}
       </div>
@@ -118,7 +170,7 @@ const AuditReviewsPage = () => {
   return (
     <div className="p-4 dark:bg-gray-800 dark:text-white">
       <h1 className="text-2xl font-bold mb-4 dark:text-gray-200">Reviews</h1>
-      <div className="flex border-b mb-4 dark:border-gray-600">
+      <div className="flex flex-wrap border-b mb-4 dark:border-gray-600">
         <button
           className={`py-2 px-4 ${
             selectedTab === 0

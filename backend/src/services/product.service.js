@@ -341,6 +341,49 @@ const updateReviewStatus = async ({ reviewId, status, adminId }) => {
   }
 };
 
+const getAllProductsByAdmin = async (adminId) => {
+  try {
+    const products = await Product.find({ adminId }).lean();
+    return products;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteProductById = async (productId) => {
+  try {
+    // Delete the product by its ID
+    const deletedProduct = await Product.findByIdAndDelete(productId);
+    if (!deletedProduct) {
+      throw new Error("Product not found");
+    }
+
+    // Delete all reviews associated with the product ID
+    await Review.deleteMany({ productId });
+
+    return deletedProduct;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateProductById = async (productId, productDetail) => {
+  try {
+    const product = await Product.findByIdAndUpdate(productId, productDetail, {
+      new: true,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteProductReviewById = async (reviewId) => {
+  try {
+    await Review.findByIdAndDelete(reviewId);
+  } catch (error) {
+    throw error;
+  }
+};
 export default {
   createProduct,
   getProducts,
@@ -352,4 +395,8 @@ export default {
   getProductStatus,
   getReviews,
   updateReviewStatus,
+  getAllProductsByAdmin,
+  updateProductById,
+  deleteProductById,
+  deleteProductReviewById,
 };

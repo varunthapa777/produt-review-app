@@ -44,6 +44,18 @@ export interface AuditReviewResponse {
   rejected: Product[];
 }
 
+interface ProductDetails {
+  _id: string;
+  name: string;
+  price: number;
+  description: string;
+  mainImage: string;
+  images: string[];
+  brand: string;
+  category: string;
+  buylink: string;
+}
+
 const fetchDashboardData = async () => {
   const response = await axios.get("/api/admin/dashboard");
   return response.data as DashboardData;
@@ -63,4 +75,13 @@ export const useReviewsByStatus = () => {
     queryKey: ["audit_reviews"],
     queryFn: fetchReviewsByStatus,
   });
+};
+
+const fetchProducts = async (): Promise<ProductDetails[]> => {
+  const { data } = await axios.get("/api/admin/products");
+  return data as ProductDetails[];
+};
+
+export const useProducts = () => {
+  return useQuery({ queryKey: ["admin-products"], queryFn: fetchProducts });
 };

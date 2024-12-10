@@ -15,7 +15,6 @@ interface getProfileResponse {
     userLevel: number;
     createdAt: string;
     updatedAt: string;
-    __v?: number;
   };
 }
 

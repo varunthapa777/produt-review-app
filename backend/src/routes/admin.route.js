@@ -7,10 +7,11 @@ const router = express.Router();
 
 router.post("/login", adminController.LoginAdmin);
 router.get("/logout", adminAuth, adminController.LogoutAdmin);
-router.get("/users", adminAuth, async (req, res) => {
-  const users = await User.find();
-  res.send(users);
-});
+router.get("/users", adminAuth, adminController.getAllUsers);
 router.get("/dashboard", adminAuth, adminController.getDashBoardData);
 router.get("/reviews", adminController.getReviews);
+router.get("/products", adminAuth, adminController.getAllProducts);
+router.delete("/products/:id", adminAuth, adminController.deleteProductById);
+router.patch("/products/:id", adminAuth, adminController.updateProductById);
+router.delete("/reviews/:id", adminAuth, adminController.deletReviewById);
 export default router;

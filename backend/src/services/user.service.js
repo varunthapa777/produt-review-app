@@ -145,6 +145,21 @@ const getUserCount = async () => {
   return await UserModel.countDocuments();
 };
 
+const getAllUsers = async () => {
+  return await UserModel.find().lean();
+};
+
+const updateProfile = async (userId, data) => {
+  try {
+    const user = await UserModel.findByIdAndUpdate(userId, data, {
+      new: true,
+    }).lean();
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   createUser,
   findUser,
@@ -155,4 +170,6 @@ export default {
   verifyOtpForEmailVerification,
   changePassword,
   getUserCount,
+  getAllUsers,
+  updateProfile,
 };

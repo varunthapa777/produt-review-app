@@ -1,11 +1,11 @@
 import { useDashboardData } from "../../api/queries/adminQueries";
 import DashboardChart from "../../components/DashboardChart";
+import Loading from "../../components/Loading";
 
 const AdminDashboard = () => {
   const { data, isLoading, error } = useDashboardData();
 
-  if (isLoading)
-    return <div className="text-center text-gray-500">Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error)
     return <div className="text-center text-red-500">Error fetching data</div>;
   return (

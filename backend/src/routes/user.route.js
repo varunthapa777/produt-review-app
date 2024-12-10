@@ -48,4 +48,6 @@ router.patch(
 
 // route for user logout
 router.get("/logout", authUser, userController.logoutUser);
+
+router.patch("/profile", authUser, userController.updateProfile);
 export default router;

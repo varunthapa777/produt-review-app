@@ -1,6 +1,8 @@
 const getRelativeTime = (date: Date): string => {
   const currentDate = new Date();
-  const timeDifference = currentDate.getTime() - date.getTime();
+  const utcCurrentDate = new Date(currentDate.toUTCString());
+  const utcDate = new Date(date.toUTCString());
+  const timeDifference = utcCurrentDate.getTime() - utcDate.getTime();
 
   if (isNaN(date.getTime())) {
     throw new Error("Invalid date format. Expected format: MM/DD/YYYY.");

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Header from "../components/Header";
 import { FaStar, FaStarHalfAlt, FaRegStar, FaArrowLeft } from "react-icons/fa";
 import { FcApproval } from "react-icons/fc";
 import { useProductById } from "../api/queries/productQueries";
@@ -10,6 +9,7 @@ import { useAddReview } from "../api/mutations/reviewMutaions";
 import { useQueryClient } from "@tanstack/react-query";
 import getRelativeTime from "../utils/getRelativeTime";
 import RatingStars from "../components/ui/RatingStars";
+import Loading from "../components/Loading";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +28,7 @@ const ProductDetailPage: React.FC = () => {
   const queryClient = useQueryClient();
 
   if (isLoading || reviewLoading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (isError || reviewError) {
@@ -100,7 +100,6 @@ const ProductDetailPage: React.FC = () => {
   console.log(product);
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-8">
         <button
           onClick={() => navigate(-1)}
