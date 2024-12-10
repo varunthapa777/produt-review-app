@@ -13,30 +13,35 @@ const AboutPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="mb-8">
-        <Logo theme={isDarkMode ? "dark" : "light"} />
+        <Logo
+          theme={isDarkMode ? "dark" : "light"}
+          className="w-24 sm:w-32 md:w-40 lg:w-48"
+        />
       </div>
-      <h1 className="text-4xl font-bold mb-4">About RevieW Sphere</h1>
-      <p className="text-lg max-w-2xl text-center mb-4">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center">
+        About RevieW Sphere
+      </h1>
+      <p className="text-base sm:text-lg md:text-xl max-w-2xl text-center mb-4">
         Welcome to RevieW Sphere, your go-to platform for honest and detailed
         product reviews. Our mission is to help consumers make informed
         decisions by providing comprehensive reviews and ratings from real
         users.
       </p>
-      <p className="text-lg max-w-2xl text-center mb-4">
+      <p className="text-base sm:text-lg md:text-xl max-w-2xl text-center mb-4">
         At RevieW Sphere, we believe in transparency and authenticity. Our
         community of reviewers shares their genuine experiences with various
         products, ensuring that you get the most accurate and reliable
         information before making a purchase.
       </p>
-      <p className="text-lg max-w-2xl text-center mb-4">
+      <p className="text-base sm:text-lg md:text-xl max-w-2xl text-center mb-4">
         Join us in creating a trusted space for product reviews and become a
         part of our growing community. Together, we can make shopping smarter
         and more enjoyable.
       </p>
-      <div className="animate-bounce  mt-8">
-        <p className="text-lg max-w-2xl text-purple-500 text-center mb-4">
+      <div className="animate-bounce mt-8">
+        <p className="text-base sm:text-lg md:text-xl max-w-2xl text-purple-500 text-center mb-4">
           Thank you for visiting RevieW Sphere. We hope you find our reviews
           helpful!
         </p>
