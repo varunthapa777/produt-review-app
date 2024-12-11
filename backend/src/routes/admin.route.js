@@ -9,7 +9,7 @@ router.post("/login", adminController.LoginAdmin);
 router.get("/logout", adminAuth, adminController.LogoutAdmin);
 router.get("/users", adminAuth, adminController.getAllUsers);
 router.get("/dashboard", adminAuth, adminController.getDashBoardData);
-router.get("/reviews", adminController.getReviews);
+router.get("/reviews", adminAuth, adminController.getReviews);
 router.get("/products", adminAuth, adminController.getAllProducts);
 router.delete("/products/:id", adminAuth, adminController.deleteProductById);
 router.patch("/products/:id", adminAuth, adminController.updateProductById);

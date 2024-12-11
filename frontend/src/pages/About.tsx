@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../components/ui/Logo";
+import lightLogo from "../assets/lightLogo.svg";
+import darkLogo from "../assets/darkLogo.svg";
 import { useColorSchemeStore } from "../stores/colorSchemeStore";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -15,9 +16,10 @@ const AboutPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="mb-8">
-        <Logo
-          theme={isDarkMode ? "dark" : "light"}
-          className="w-24 sm:w-32 md:w-40 lg:w-48"
+        <img
+          src={isDarkMode ? darkLogo : lightLogo}
+          alt="RevieW Sphere Logo"
+          className="h-30 w-60"
         />
       </div>
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center">
