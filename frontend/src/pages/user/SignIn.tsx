@@ -57,7 +57,7 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen  items-center justify-center bg-gray-50 dark:bg-gray-900 ">
       <motion.div
         className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
         initial={{ opacity: 0, y: -50 }}
@@ -66,11 +66,13 @@ const SignInPage = () => {
       >
         <div className="flex justify-center">
           {/* Logo */}
-          <img
-            src={isDarkMode ? darkLogo : lightLogo}
-            alt="App Logo"
-            className="w-48 h-24"
-          />
+          <Link to={"/"} className="flex items-center">
+            <img
+              src={isDarkMode ? darkLogo : lightLogo}
+              alt="App Logo"
+              className="w-48 h-24"
+            />
+          </Link>
         </div>
         <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white">
           Sign In to Your Account

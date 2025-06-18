@@ -73,6 +73,34 @@ const addProductReview = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+const updateProductReview = async (req, res) => {
+  try {
+    const review = await productService.updateProductReview({
+      reviewId: req.params.reviewId,
+      userId: req.user._id,
+      review: req.body,
+    });
+    res.status(200).json(review);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteProductReview = async (req, res) => {
+  try {
+    const review = await productService.deleteProductReview({
+      reviewId: req.params.reviewId,
+      userId: req.user._id,
+    });
+    res.status(200).json(review);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const updateReviewStatus = async (req, res) => {
   console.log(req.params.reviewId, req.body.status, req.params.reviewId);
   try {
@@ -97,4 +125,6 @@ export default {
   getProductReviews,
   addProductReview,
   updateReviewStatus,
+  updateProductReview,
+  deleteProductReview,
 };

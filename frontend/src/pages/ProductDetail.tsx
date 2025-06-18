@@ -1,15 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaStar, FaStarHalfAlt, FaRegStar, FaArrowLeft } from "react-icons/fa";
+import {
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+  FaArrowLeft,
+  FaExternalLinkAlt,
+} from "react-icons/fa";
 import { FcApproval } from "react-icons/fc";
 import { useProductById } from "../api/queries/productQueries";
 import toast from "react-hot-toast";
 import { useReviewsById } from "../api/queries/reviewQueries";
-import { useAddReview } from "../api/mutations/reviewMutaions";
+import {
+  useAddReview,
+  useDeleteReview,
+  useUpdateReview,
+} from "../api/mutations/reviewMutaions";
 import { useQueryClient } from "@tanstack/react-query";
 import getRelativeTime from "../utils/getRelativeTime";
 import RatingStars from "../components/ui/RatingStars";
 import Loading from "../components/Loading";
+import { useProfileQuery } from "../api/queries/userQueries";
+import { Heart } from "lucide-react";
+import { useGetFavourite } from "../api/queries/favrouriteQueries";
+import {
+  useAddFavourite,
+  useRemoveFavourite,
+} from "../api/mutations/favouriteMutation";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,9 +38,34 @@ const ProductDetailPage: React.FC = () => {
     isError: reviewError,
   } = useReviewsById(id as string);
   const addReviewMutation = useAddReview();
+  const updateReviewMutation = useUpdateReview();
+  const deleteReviewMutation = useDeleteReview();
+  const { data } = useProfileQuery();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [rating, setRating] = useState<number>(0);
-  const [comment, setComment] = useState<string>("");
+  const [updateReview, setUpdateReview] = useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const addFavouriteMutation = useAddFavourite();
+  const removeFavouriteMutation = useRemoveFavourite();
+  // If user has already reviewed, prefill comment and rating
+  const userReview = reviews?.find(
+    (review) => String(review.userId) === data?.user._id
+  );
+  const [rating, setRating] = useState<number>(
+    userReview ? userReview.rating : 0
+  );
+  const [comment, setComment] = useState<string>(
+    userReview ? userReview.comment : ""
+  );
+
+  const { data: favourite } = useGetFavourite();
+  React.useEffect(() => {
+    if (userReview) {
+      setRating(userReview.rating);
+      setComment(userReview.comment);
+      setUpdateReview(true);
+    }
+    // eslint-disable-next-line
+  }, [userReview]);
 
   const queryClient = useQueryClient();
 
@@ -88,6 +130,66 @@ const ProductDetailPage: React.FC = () => {
     console.log("Rating:", rating);
     console.log("Comment:", comment);
   };
+  const handleUpdateReview = () => {
+    if (rating === 0) {
+      toast.error("Please select a rating");
+      return;
+    }
+    if (comment.trim() === "") {
+      toast.error("Please enter a comment");
+      return;
+    }
+
+    updateReviewMutation.mutate(
+      {
+        reviewId: userReview?._id as string,
+        productId: id as string,
+        rating,
+        comment,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Review updated successfully");
+          setRating(0);
+          setComment("");
+          setUpdateReview(false);
+          queryClient.invalidateQueries({
+            queryKey: ["review", id],
+            exact: true,
+          });
+        },
+        onError: () => {
+          toast.error("Failed to update review");
+        },
+      }
+    );
+  };
+
+  const handleDeleteReview = () => {
+    if (!userReview) {
+      toast.error("No review to delete");
+      return;
+    }
+
+    deleteReviewMutation.mutate(
+      { reviewId: userReview._id, productId: id as string },
+      {
+        onSuccess: () => {
+          toast.success("Review deleted successfully");
+          setRating(0);
+          setComment("");
+          setUpdateReview(false);
+          queryClient.invalidateQueries({
+            queryKey: ["review", id],
+            exact: true,
+          });
+        },
+        onError: () => {
+          toast.error("Failed to delete review");
+        },
+      }
+    );
+  };
 
   const calculateAverageRating = (reviews: { rating: number }[]) => {
     if (reviews.length === 0) return 0;
@@ -97,7 +199,21 @@ const ProductDetailPage: React.FC = () => {
 
   const averageRating = calculateAverageRating(reviews || []);
 
-  console.log(product);
+  const handleAddToFavorites = () => {
+    // Logic to add product to favorites
+    if (!isFavorite) {
+      setIsFavorite(true);
+      addFavouriteMutation.mutate(id as string);
+    }
+  };
+  const handleRemoveFromFavorites = () => {
+    // Logic to remove product from favorites
+    if (isFavorite) {
+      setIsFavorite(false);
+      removeFavouriteMutation.mutate(id as string);
+    }
+  };
+
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
       <div className="container mx-auto px-4 py-8">
@@ -148,12 +264,28 @@ const ProductDetailPage: React.FC = () => {
               <strong>Category:</strong> {product?.category}
             </p>
             <br />
-            <a
-              className="dark:text-white dark:bg-blue-800 dark:hover:bg-blue-900 bg-blue-400 hover:bg-blue-500 px-4 py-4 rounded-md"
-              href={product?.buylink}
-            >
-              Buy Link
-            </a>
+            <div className="flex space-x-4">
+              <a
+                className="dark:text-white dark:bg-blue-800 dark:hover:bg-blue-900 bg-blue-400 hover:bg-blue-500 px-4 py-4 rounded-md"
+                href={product?.buylink}
+                target="_blank"
+              >
+                <FaExternalLinkAlt className="inline-block ml-2 text-white mr-2" />
+                Buy Link
+              </a>
+              {favourite?.products.some((p) => p._id === id) ? (
+                <button onClick={handleRemoveFromFavorites}>
+                  <Heart
+                    fill="red"
+                    className="size-12 inline-block text-red-500"
+                  />
+                </button>
+              ) : (
+                <button onClick={handleAddToFavorites}>
+                  <Heart className="size-12 inline-block  dark:text-white" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
         <div className="mt-8">
@@ -178,7 +310,16 @@ const ProductDetailPage: React.FC = () => {
                   {getRelativeTime(new Date(review.createdAt))}
                 </p>
                 <p>
-                  <strong className="dark:text-white">{review.userName}</strong>{" "}
+                  <strong className="dark:text-white">
+                    {String(review.userId) == data?.user._id ? (
+                      <span>
+                        {review.userName}{" "}
+                        <span className="text-purple-400">(You)</span>
+                      </span>
+                    ) : (
+                      review.userName
+                    )}
+                  </strong>{" "}
                   {review.reviewStatus === "approved" ? (
                     <FcApproval className="text-green-500 inline-block text-2xl" />
                   ) : (
@@ -225,12 +366,30 @@ const ProductDetailPage: React.FC = () => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <button
-              onClick={handleSubmitReview}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
-            >
-              Submit Review
-            </button>
+            {updateReview ? (
+              <div className="flex space-x-5">
+                <button
+                  onClick={handleUpdateReview}
+                  className="mt-4 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg"
+                >
+                  Update Review
+                </button>
+
+                <button
+                  onClick={handleDeleteReview}
+                  className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                >
+                  Delete Review
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleSubmitReview}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
+              >
+                Submit Review
+              </button>
+            )}
           </div>
         </div>
       </div>

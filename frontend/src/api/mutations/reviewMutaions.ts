@@ -21,6 +21,13 @@ interface UpdateReviewStatusInput {
   productId: string;
 }
 
+interface UpdateReviewInput {
+  reviewId: string;
+  productId: string;
+  rating: number;
+  comment: string;
+}
+
 const addReview = async (review: AddReviewInput): Promise<Review> => {
   const { data } = await axios.post(
     `/api/products/${review.productId}/reviews`,
@@ -32,6 +39,35 @@ const addReview = async (review: AddReviewInput): Promise<Review> => {
 export const useAddReview = () => {
   return useMutation<Review, Error, AddReviewInput>({
     mutationFn: addReview,
+  });
+};
+
+const updateReview = async (review: UpdateReviewInput): Promise<Review> => {
+  const { data } = await axios.put(
+    `/api/products/${review.productId}/reviews/${review.reviewId}`,
+    review
+  );
+  return data;
+};
+export const useUpdateReview = () => {
+  return useMutation<Review, Error, UpdateReviewInput>({
+    mutationFn: updateReview,
+  });
+};
+
+const deleteReview = async ({
+  reviewId,
+  productId,
+}: {
+  reviewId: string;
+  productId: string;
+}): Promise<void> => {
+  await axios.delete(`/api/products/${productId}/reviews/${reviewId}`);
+};
+
+export const useDeleteReview = () => {
+  return useMutation<void, Error, { reviewId: string; productId: string }>({
+    mutationFn: deleteReview,
   });
 };
 

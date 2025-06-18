@@ -9,6 +9,7 @@ import adminRoute from "./routes/admin.route.js";
 import productRoute from "./routes/product.route.js";
 import fileRoute from "./routes/file.route.js";
 import multer from "multer";
+import favouriteRoutes from "./routes/favourite.route.js";
 
 const __dirname = path.resolve();
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors());
 app.use("/api/users", userRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/products", productRoute);
+app.use("/api/favourites", favouriteRoutes);
 app.use("/api/files", fileRoute);
 
 app.get("*", (req, res) => {

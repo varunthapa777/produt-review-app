@@ -5,20 +5,29 @@ import Spinner from "../../components/ui/Spinner";
 import toast, { ErrorIcon } from "react-hot-toast";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
-import UpdateProductModal from "../../components/UpdateProductModal";
+import UpdateProductModal, {
+  ProductDetails,
+} from "../../components/UpdateProductModal";
 interface InOperation {
   productId: string;
   operation: boolean;
 }
+
 const ProductPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [UpdateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const { data, isLoading, isError } = useProducts();
+
   const queryClient = useQueryClient();
   const [inOperation, setInOperation] = useState<InOperation>({
     productId: "",
     operation: false,
   });
+
+  const [selectedProduct, setSelectedProduct] = useState<ProductDetails | null>(
+    null
+  );
+  const [productId, setProductId] = useState<string>("");
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
@@ -103,20 +112,30 @@ const ProductPage = () => {
               </button>
               <button
                 className="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600"
-                onClick={openUpdateModal}
+                onClick={() => {
+                  setSelectedProduct(product as ProductDetails);
+                  setProductId(product._id);
+                  openUpdateModal();
+                }}
               >
                 Update
               </button>
-              <UpdateProductModal
-                isOpen={UpdateModalIsOpen}
-                onRequestClose={closeUpdateModal}
-                productId={product._id}
-                data={product}
-              />
             </div>
           </div>
         ))}
       </div>
+      {selectedProduct && (
+        <UpdateProductModal
+          isOpen={UpdateModalIsOpen}
+          onRequestClose={() => {
+            closeUpdateModal();
+            setSelectedProduct(null);
+            setProductId("");
+          }}
+          productId={productId}
+          data={selectedProduct}
+        />
+      )}
     </div>
   );
 };

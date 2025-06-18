@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  FaSearch,
-  FaUser,
-  FaInfoCircle,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
+import { FaUser, FaInfoCircle, FaBars } from "react-icons/fa";
 import { useAuthStore } from "../stores/authStore";
 import DarkLogo from "../assets/darkLogo.svg";
 import LightLogo from "../assets/lightLogo.svg";
@@ -15,13 +8,13 @@ import { useProfileQuery } from "../api/queries/userQueries";
 
 const Header = () => {
   const { isAuthenticated } = useAuthStore();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data } = useProfileQuery();
 
-  const handleSearchClick = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
+  // const handleSearchClick = () => {
+  //   setIsSearchOpen(!isSearchOpen);
+  // };
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -32,7 +25,7 @@ const Header = () => {
       <header className="bg-white dark:bg-gray-800 shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="mr-5">
-            <Link to="/" className="flex items-center">
+            <Link to="/home" className="flex items-center">
               <img
                 src={LightLogo}
                 alt="Logo"
@@ -45,7 +38,7 @@ const Header = () => {
               />
             </Link>
           </div>
-          <motion.div
+          {/* <motion.div
             className={`relative w-full ${
               isSearchOpen ? "max-w-2xl" : "max-w-xs"
             } md:max-w-lg lg:max-w-2xl`}
@@ -72,7 +65,7 @@ const Header = () => {
                 onClick={handleSearchClick}
               />
             )}
-          </motion.div>
+          </motion.div> */}
 
           <div className="flex items-center space-x-4">
             <div className="md:hidden ml-5">

@@ -24,6 +24,7 @@ import ProductPage from "./pages/admin/Products";
 import ProductDetailPage from "./pages/ProductDetail";
 import AboutPage from "./pages/About";
 import Header from "./components/Header";
+import LandingPage from "./pages/Landing";
 const queryClient = new QueryClient();
 const App = () => {
   const { setDarkMode } = useColorSchemeStore();
@@ -48,8 +49,27 @@ const App = () => {
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <Routes>
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/home" replace />
+              ) : (
+                <LandingPage />
+              )
+            }
+          />
           <Route element={<Header />}>
-            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/home"
+              element={
+                isAuthenticated ? (
+                  <HomePage />
+                ) : (
+                  <Navigate to="/signin" replace />
+                )
+              }
+            />
             <Route path="/products/:id" element={<ProductDetailPage />} />
           </Route>
           <Route

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 Modal.setAppElement("#root");
 
@@ -45,6 +46,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [newImageUrl, setNewImageUrl] = useState("");
   const [showImages, setShowImages] = useState(false);
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -84,6 +86,10 @@ const ProductModal: React.FC<ProductModalProps> = ({
     try {
       await axios.post("/api/products", productDetails);
       toast.success("Product added successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["admin-products"],
+        exact: true,
+      });
       setProductDetails({
         name: "",
         price: 0,

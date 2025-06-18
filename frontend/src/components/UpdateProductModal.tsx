@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -12,7 +12,7 @@ interface ProductModalProps {
   data: ProductDetails;
   onRequestClose: () => void;
 }
-interface ProductDetails {
+export interface ProductDetails {
   name: string;
   price: number;
   buylink: string;
@@ -45,7 +45,20 @@ const UpdateProductModal: React.FC<ProductModalProps> = ({
     brand: data.brand,
     category: data.category,
   });
-
+  useEffect(() => {
+    if (isOpen) {
+      setProductDetails({
+        name: data.name,
+        price: data.price,
+        buylink: data.buylink,
+        mainImage: data.mainImage,
+        description: data.description,
+        images: data.images,
+        brand: data.brand,
+        category: data.category,
+      });
+    }
+  }, [data, isOpen]);
   const [extractLink, setExtractLink] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
   const [showImages, setShowImages] = useState(false);
@@ -134,7 +147,7 @@ const UpdateProductModal: React.FC<ProductModalProps> = ({
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
     >
       <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
-        Add Product
+        Update Product
       </h2>
       <input
         type="text"
@@ -169,7 +182,7 @@ const UpdateProductModal: React.FC<ProductModalProps> = ({
         </div>
         <input
           type="text"
-          name="title"
+          name="name"
           placeholder="Product Title"
           value={productDetails.name}
           onChange={handleInputChange}
@@ -273,6 +286,7 @@ const UpdateProductModal: React.FC<ProductModalProps> = ({
             Update Product
           </button>
           <button
+            onClick={onRequestClose}
             type="button"
             className=" bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
           >

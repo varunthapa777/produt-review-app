@@ -5,7 +5,7 @@ import {
   FaUsers,
   FaStar,
   FaBox,
-  FaUserShield,
+  // FaUserShield,
 } from "react-icons/fa";
 import { useAdminAuthStore } from "../stores/adminAuthStore";
 import axios from "axios";
@@ -18,7 +18,7 @@ const AdminSidebar = () => {
     { name: "Users", path: "/admin/users", icon: <FaUsers /> },
     { name: "Reviews", path: "/admin/reviews", icon: <FaStar /> },
     { name: "Products", path: "/admin/products", icon: <FaBox /> },
-    { name: "Moderators", path: "/admin/moderators", icon: <FaUserShield /> },
+    // { name: "Moderators", path: "/admin/moderators", icon: <FaUserShield /> },
   ];
   const { adminLogout } = useAdminAuthStore();
   const navigate = useNavigate();

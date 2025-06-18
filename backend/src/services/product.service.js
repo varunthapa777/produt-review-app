@@ -145,6 +145,31 @@ const addProductReview = async ({ userId, productId, review }) => {
   }
 };
 
+const updateProductReview = async ({ reviewId, userId, review }) => {
+  const { rating, comment } = review;
+
+  if (!rating || !comment) {
+    throw new Error("Rating and comment are required");
+  }
+  try {
+    const updatedReview = await Review.findOneAndUpdate(
+      { _id: reviewId, userId },
+      { rating, comment },
+      { new: true }
+    );
+
+    if (!updatedReview) {
+      throw new Error(
+        "Review not found or you do not have permission to update it"
+      );
+    }
+
+    return updatedReview;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getProductsCountByAdminId = async (adminId) => {
   try {
     const count = await Product.countDocuments({ adminId });
@@ -384,6 +409,23 @@ const deleteProductReviewById = async (reviewId) => {
     throw error;
   }
 };
+
+const deleteProductReview = async ({ reviewId, userId }) => {
+  try {
+    const deletedReview = await Review.findOneAndDelete({
+      _id: reviewId,
+      userId,
+    });
+    if (!deletedReview) {
+      throw new Error(
+        "Review not found or you do not have permission to delete it"
+      );
+    }
+    return deletedReview;
+  } catch (error) {
+    throw error;
+  }
+};
 export default {
   createProduct,
   getProducts,
@@ -399,4 +441,6 @@ export default {
   updateProductById,
   deleteProductById,
   deleteProductReviewById,
+  updateProductReview,
+  deleteProductReview,
 };
